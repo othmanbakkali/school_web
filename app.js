@@ -326,16 +326,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 9. Brochure Lightbox Modal Preview Handler
+    // 9. Brochure & PDF Document Center Handler (Category Filter & Lightbox)
     // ==========================================================================
     const brochureModal = document.getElementById('brochure-modal');
     const brochureModalImg = document.getElementById('brochure-modal-img');
     const brochureModalClose = document.getElementById('brochure-modal-close');
-    const previewTriggers = document.querySelectorAll('.btn-preview-brochure');
+    const filterBtns = document.querySelectorAll('.doc-filter-btn');
+    const docCards = document.querySelectorAll('.brochure-card');
 
+    // Document Category Filtering
+    if (filterBtns.length > 0 && docCards.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+                docCards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if (filter === 'all' || category === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+
+    // Lightbox Preview Modal Handler using Event Delegation
     if (brochureModal && brochureModalImg) {
-        previewTriggers.forEach(trigger => {
-            trigger.addEventListener('click', (e) => {
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest('.btn-preview-brochure');
+            if (trigger) {
                 e.preventDefault();
                 const imgSrc = trigger.getAttribute('data-img');
                 if (imgSrc) {
@@ -343,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     brochureModal.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 }
-            });
+            }
         });
 
         function closeModal() {
