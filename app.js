@@ -324,4 +324,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1500);
         });
     }
+
+    // ==========================================================================
+    // 9. Brochure Lightbox Modal Preview Handler
+    // ==========================================================================
+    const brochureModal = document.getElementById('brochure-modal');
+    const brochureModalImg = document.getElementById('brochure-modal-img');
+    const brochureModalClose = document.getElementById('brochure-modal-close');
+    const previewTriggers = document.querySelectorAll('.btn-preview-brochure');
+
+    if (brochureModal && brochureModalImg) {
+        previewTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const imgSrc = trigger.getAttribute('data-img');
+                if (imgSrc) {
+                    brochureModalImg.src = imgSrc;
+                    brochureModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        function closeModal() {
+            brochureModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (brochureModalClose) {
+            brochureModalClose.addEventListener('click', closeModal);
+        }
+
+        brochureModal.addEventListener('click', (e) => {
+            if (e.target === brochureModal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && brochureModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
 });
