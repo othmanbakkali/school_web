@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - master
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
 
 jobs:
   build-and-test:
@@ -50,8 +51,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/webschool || cd /opt/webschool || mkdir -p /var/www/webschool && cd /var/www/webschool
-            git pull origin main || git pull origin master
-            docker-compose down
-            docker-compose up -d --build
+            cd /opt/school_mobile
+            git fetch origin main
+            git reset --hard origin/main
+            docker-compose up -d --build --remove-orphans
             docker system prune -f
+
